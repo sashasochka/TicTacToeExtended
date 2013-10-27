@@ -1,0 +1,15 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Sochka Oleksandr -- lead programmer -- sasha.sochka@gmail.com
+    Yaroslav Bogdanovich -- game author and ideologist
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3
+    Normalize.css, jQuery, Modernizr, KineticJS,
+
+    In plans: AngularJS, bower
+    Secondary plans: node.js, npm, Amazon EC2, heroku

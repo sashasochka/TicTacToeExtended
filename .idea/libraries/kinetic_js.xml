@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="kinetic.js" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/js/vendor/kinetic.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/js/vendor/kinetic.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

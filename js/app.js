@@ -13,3 +13,18 @@ app.filter('reverse', function() {
     return items.slice().reverse();
   };
 });
+
+app.run(function($rootScope, $window){
+  var table = angular.element("#main-table");
+  var getSize = function () {
+    return Math.min($window.outerHeight * 0.88,
+      $window.outerWidth * 0.5);
+  };
+
+  var updateSizes = function () {
+    table.height(getSize());
+    table.width(getSize());
+  };
+  updateSizes();
+  angular.element($window).bind('resize', updateSizes);
+});

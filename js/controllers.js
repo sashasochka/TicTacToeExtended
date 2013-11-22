@@ -1,81 +1,76 @@
-/* Controllers */
-var notification_color = {
-  warning: 'orange',
-  error: 'red',
-  congratulations: 'green'
-};
-
 function Warning(text) {
-  this.style = {
-    color: notification_color.warning
-  };
-  this.text = 'Warning: ' + text;
+  this.class = 'alert-warning';
+  this.type = 'Warning';
+  this.text = text;
 }
 
 function Congratulations(text) {
-  this.style = {
-    color: notification_color.congratulations
-  };
-  this.text = 'Congratulations! ' + text;
+  this.class = 'alert-success';
+  this.type = 'Congratulations';
+  this.text = text;
 }
 
+function CellController($scope, game, notifications) {
+  $scope.coord = {
+    x: $scope.innerCellIndex,
+    y: $scope.outerCellIndex
+  };
+  $scope.owner = game.undefinedWinner;
 
-function Cell(coord, square, game, notifications) {
-  this.coord = coord;
-  this.square = square;
-  this.game = game;
-  this.style = {};
-
-  var self = this;
-  this.click = function () {
-    if (!game.isAllowedMove(this.coord)) {
+  $scope.click = function () {
+    if (!game.isAllowedMove($scope.coord)) {
       notifications.push(new Warning('Incorrect move!'));
     } else {
-      var image_src = 'img/' + (game.currentPlayer == 1 ? 'cross' : 'circle') + '.png';
-      game.makeTurn(this.coord);
-      self.style.backgroundImage = 'url(' + image_src + ')';
+      $scope.owner = game.currentPlayer;
+      game.makeTurn($scope.coord);
       if (game.finished()) {
-        notifications.push(new Congratulations('Player ' + game.winner() + ' has won!'));
-      } else {
-        notifications.push();
-      }
-
-      if (!game.isFirstMove()) {
-        var squareCoord = game.squareCoordByCell(game.previousTurnCoord);
-        square.main_table[squareCoord.y][squareCoord.x].style.borderColor = '';
-      }
-      var nextSquareCoord = game.nextSquare().coord;
-      if (nextSquareCoord && !game.finished()) {
-        square.main_table[nextSquareCoord.y][nextSquareCoord.x].style.borderColor = 'yellow';
+        var msg = 'Player ' + game.winner() + ' has won!';
+        notifications.push(new Congratulations(msg));
+        bootbox.confirm('Congratulations! ' + msg + '<br>Play again?', function (result) {
+          if (result) {
+            $scope.$apply(game.reset());
+          }
+        });
       }
     }
   };
+
+  $scope.cellIsOwnedByCrosses = function () {
+    return game.getCell($scope.coord).owner === 1;
+  };
+
+  $scope.cellIsOwnedByCircles = function () {
+    return game.getCell($scope.coord).owner === 2;
+  };
 }
 
-function Square(coord, main_table, game, notifications) {
-  this.coord = coord;
-  this.main_table = main_table;
-  this.game = game;
-  this.style = {};
-  this.table = [];
-  for (var row = 0; row < 3; ++row) {
-    this.table[row] = [];
-    for (var col = 0; col < 3; ++col) {
-      this.table[row][col] = new Cell({y: row + 3 * coord.y, x: col + 3 * coord.x}, this, game, notifications);
-    }
-  }
+function SquareController($scope, game) {
+  $scope.coord = {
+    x: $scope.innerSquareIndex,
+    y: $scope.outerSquareIndex
+  };
+
+  $scope.isNextSquare = function () {
+    return game.nextSquare() && _.isEqual($scope.coord, game.nextSquare().coord);
+  };
+
+  $scope.squareIsOwnedByCrosses = function () {
+    return game.getSquare($scope.coord).owner === 1;
+  };
+
+  $scope.squareIsOwnedByCircles = function () {
+    return game.getSquare($scope.coord).owner === 2;
+  };
 }
 
-function GameController($scope, game) {
-  $scope.notifications = [];
-  $scope.table = [];
-  for (var row = 0; row < 3; ++row) {
-    $scope.table[row] = [];
-    for (var col = 0; col < 3; ++col) {
-      $scope.table[row][col] = new Square({y: row, x: col}, $scope.table, game, $scope.notifications);
-    }
-  }
+function GameController($scope, game, notifications) {
+  $scope.notifications = notifications;
+  $scope.gameSize = 3;
+  $scope.indexesRange = _.range($scope.gameSize);
   $scope.currentPlayerImgSrc = function () {
     return 'img/' + (game.currentPlayer == 1 ? 'cross' : 'circle') + '.png';
   }
+  $scope.restartGame = function () {
+    game.reset();
+  };
 }

@@ -1,31 +1,58 @@
 <!doctype html>
-<html lang="en" ng-app="TicTacToeClient">
+<html lang="en" ng-app="TicTacToeClient" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="utf-8">
   <title>My AngularJS App</title>
+  <link rel="stylesheet" href="css/boilerplate.css"/>
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/app.css"/>
 </head>
 <body ng-controller="GameController">
-  <img ng-src="{{ currentPlayerImgSrc() }}" id="currentPlayerImg">
-  <div id="notifications">&nbsp;
-    <div ng-repeat="notification in notifications | reverse" ng-style="notification.style">
-      {{ notification.text }}
+  <div id="left-block">
+    <img ng-src="{{ currentPlayerImgSrc() }}" id="cur-player-block">
+    <input id="restart-btn" type="button" class="btn btn-success" value="Restart" ng-click="restartGame()">
+    <label class="control-label">Player 1 name:</label> <input class="form-control" placeholder="Player 1" ng-model="firstPlayerName">
+    <label class="control-label">Player 2 name:</label> <input class="form-control" placeholder="Player 2" ng-model="secondPlayerName">
+    <br>Score 3 : 4</b> <br>
+    <label class="control-label">Play with bot</label> <input type="checkbox">
+
+  </div>
+  <div id="main-block">
+    <table id="main-table">
+      <tr ng-repeat="square_row in indexesRange" ng-init="outerSquareIndex = square_row">
+        <td ng-repeat="square_col in indexesRange" ng-init="innerSquareIndex = square_col">
+          <div ng-controller="SquareController" class="square"
+               ng-class="{highlight: isNextSquare()}">
+            <table>
+              <tr ng-repeat="cell_row in indexesRange" ng-init="outerCellIndex = gameSize * square_row + cell_row">
+                <td ng-repeat="cell_col in indexesRange" ng-init="innerCellIndex = gameSize * square_col + cell_col"
+                    class="cell-outer"
+                    ng-class="{'square-owned-by-crosses': squareIsOwnedByCrosses(),
+                               'square-owned-by-circles': squareIsOwnedByCircles()}">
+                  <div ng-controller="CellController"
+                       class="cell"
+                       ng-class="{'cell-owned-by-crosses': cellIsOwnedByCrosses(),
+                                  'cell-owned-by-circles': cellIsOwnedByCircles()}"
+                       ng-click="click()"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="notifications">
+    <div ng-repeat="notification in notifications | reverse" class="alert" ng-class="notification.class">
+      <strong>{{ notification.type}}! </strong> {{ notification.text }}
     </div>
   </div>
-  <table class="main_table">
-    <tr ng-repeat="row in table">
-      <td ng-repeat="square in row">
-        <table class="square" ng-style="square.style">
-          <tr ng-repeat="cell_row in square.table">
-            <td ng-repeat="cell in cell_row" class="cell" ng-style="cell.style" ng-click="cell.click()">
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+
+  <script src="js/vendor/jquery.js"></script>
   <script src="js/vendor/angular/angular.js"></script>
   <script src="js/vendor/lodash.min.js"></script>
+  <script src="js/vendor/bootstrap.min.js"></script>
+  <script src="js/vendor/bootbox.min.js"></script>
   <script src="js/game_logic.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/app.js"></script>

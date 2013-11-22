@@ -1,54 +1,94 @@
 body {
-    width: 99%;
-    height: 99%;
-    font-weight: bold;
-    font-size: 14px;
-    background-color: #6469b0;
+  padding: 2%;
+  min-height: 100%;
+  width: 100%;
+  background-color: #6469b0;
 }
 
-.main_table {
-    background: gray;
-    margin: 0 auto;
-    border-spacing: 1px;
+#main-block {
+  width: 70%;
+  height: 70%;
+  float: left;
+}
+
+#main-table {
+  text-align: center;
+  background: gray;
+  padding: 5px;
+  width: 70%;
+  height: 900px;
+  margin: 0 auto;
 }
 
 .square {
-    background: orange;
-    border-spacing: 2px;
-    border: 3px gray solid;
+  width: 100%;
+  height: 100%;
+  border: 4px solid gray;
+}
+
+.highlight {
+  border: 4px solid yellow;
+}
+
+#main-table table {
+  width: 100%;
+  height: 100%;
+}
+
+.cell-outer {
+  border: 4px black solid;
+  background-color: #333;
+  background-size: cover;
+  text-align: center;
 }
 
 .cell {
-    width: 70px;
-    height: 70px;
-    background-color: #333;
-    border: 3px black solid;
-    background-size: cover;
+  width: 90%;
+  height: 90%;
+  background-size: cover;
+  margin: 0 auto;
+}
+
+.cell-owned-by-crosses {
+  background-image: url('../img/cross.png');
+}
+
+.cell-owned-by-circles {
+  background-image: url('../img/circle.png');
+}
+
+.square-owned-by-crosses {
+  background-color: brown;
+}
+
+.square-owned-by-circles {
+  background-color: lightblue;
+}
+
+#left-block {
+  float: left;
+  margin: 2%;
+}
+
+#cur-player-block {
+  margin-bottom: 10px;
+  padding: 4px;
+  height: 70px;
+  border: 2px orange solid;
+  background-color: #333;
+  display: block;
 }
 
 #notifications {
-    float: right;
-    width: 300px;
-    margin: 0;
-    background-color: #faf8ff;
-    border-radius: 14px;
-    padding-bottom: 10px;
-    padding-left: 10px;
-    height: 400px;
-    overflow: auto;
+  float: right;
+  overflow: hidden;
+  padding: 8px;
+  border-radius: 14px;
+  width: 300px;
+  height: 100%;
 }
 
-.notification {
+#restart-btn {
+  display: block;
+  margin-bottom: 10px;
 }
-
-#currentPlayerImg {
-    float: left;
-    margin-top: 20px;
-    margin-left: 20px;
-    width: 70px;
-    height: 70px;
-    background-color: #333;
-    border: 2px orange solid;
-    padding: 4px;
-}
-

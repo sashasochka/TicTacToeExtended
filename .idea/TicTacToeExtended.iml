@@ -8,6 +8,7 @@
     <orderEntry type="library" name="JsTestDriver Assertion Framework" level="application" />
     <orderEntry type="library" name="jquery" level="application" />
     <orderEntry type="library" name="angular" level="application" />
+    <orderEntry type="library" name="kinetic.js" level="project" />
   </component>
 </module>
 

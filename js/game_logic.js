@@ -37,6 +37,8 @@ TicTacToeGame.Cell.prototype.empty = function () {
   return this.owner === 0;
 };
 
+TicTacToeGame.prototype.reset = TicTacToeGame;
+
 TicTacToeGame.prototype.getCell = function (arg1, arg2) {
   if (arguments.length === 1) {
     var coord = arg1;

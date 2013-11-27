@@ -44,7 +44,7 @@ EasyBot.prototype.positionScore = function (game, player) {
   var score = 0;
   _.each(_.range(game.size), function (row) {
     _.each(_.range(game.size), function (col) {
-      if (game.getSquare(col, row).owner == player) {
+      if (game.getSquare(col, row).owner === player) {
         ++score;
       }
     });

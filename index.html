@@ -1,22 +1,47 @@
 <!doctype html>
-<html lang="en" ng-app="TicTacToeClient" xmlns="http://www.w3.org/1999/html">
+<html lang="en" ng-app="TicTacToeClient">
 <head>
   <meta charset="utf-8">
   <title>My AngularJS App</title>
-  <link rel="stylesheet" href="css/boilerplate.css"/>
-  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css"/>
+  <link rel="stylesheet" href="css/boilerplate.css">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/app.css" rel="stylesheet">
 </head>
 <body ng-controller="GameController">
   <div id="left-block">
-    <img ng-src="{{ currentPlayerImgSrc() }}" id="cur-player-block">
-    <input id="restart-btn" type="button" class="btn btn-success" value="Restart" ng-click="restartGame()">
-    <label class="control-label">Player 1 name:</label> <input class="form-control" placeholder="Player 1" ng-model="firstPlayerName">
-    <label class="control-label">Player 2 name:</label> <input class="form-control" placeholder="Player 2" ng-model="secondPlayerName">
-    <br>Score 3 : 4</b> <br>
-    <label class="control-label">Play with bot</label> <input type="checkbox">
+    <img ng-src="img/{{ currentPlayerFigure() }}.png" id="cur-player-block">
+    <span class="lead player{{ currentPlayer().id }}-color">{{ currentPlayer().getUsername() }}</span>  <br>
+    <div class="btn-group">
+      <input id="restart-btn" type="button" class="btn btn-success" value="Restart" ng-click="restartGame()">
+      <input type="button" class="btn btn-warning" value="Offer draw">
+      <div class="btn-group">
+        <input type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" value="Resign as">
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#">Player 1</a></li>
+          <li><a href="#">Player 2</a></li>
+        </ul>
+      </div>
+    </div>
+    <label class="control-label lead">Play with bot
+      <input type="checkbox" ng-model="settings.botEnabled">
+    </label><br>
+    <label class="control-label lead">Bot delay (ms)
+      <input type="number" class="form-control bot-delay-input"
+             ng-model="settings.botDelay"
+             min="0" max="3000" step="100">
+    </label><br>
 
+    <div class="player-info-help lead"> Player usernames & scores </div>
+    <div class="input-group" ng-repeat="player in players">
+      <span class="input-group-addon">@</span>
+      <input type="text" class="form-control" ng-model="player.username" maxlength="20" placeholder="Player {{ player.id }}">
+      <span class="input-group-addon score-addon
+              {{ 'player' + player.id + '-color' }}">
+        {{ score[player.id] }}
+      </span>
+    </div>
   </div>
+
   <div id="main-block">
     <table id="main-table">
       <tr ng-repeat="square_row in indexesRange" ng-init="outerSquareIndex = square_row">
@@ -42,6 +67,7 @@
       </tr>
     </table>
   </div>
+
   <div id="notifications">
     <div ng-repeat="notification in notifications | reverse" class="alert" ng-class="notification.class">
       <strong>{{ notification.type}}! </strong> {{ notification.text }}
@@ -55,6 +81,8 @@
   <script src="js/vendor/bootbox.min.js"></script>
   <script src="js/game_logic.js"></script>
   <script src="js/plugins.js"></script>
+  <script src="js/easy_bot.js"></script>
+  <script src="js/random_bot.js"></script>
   <script src="js/app.js"></script>
   <script src="js/controllers.js"></script>
 </body>

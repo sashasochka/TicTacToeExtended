@@ -64,11 +64,11 @@ function SquareController($scope, game) {
   };
 
   $scope.squareIsOwnedByCrosses = function () {
-    return game.getSquare($scope.coord).ownerID === 1;
+    return game.getSquare($scope.coord).owner === 1;
   };
 
   $scope.squareIsOwnedByCircles = function () {
-    return game.getSquare($scope.coord).ownerID === 2;
+    return game.getSquare($scope.coord).owner === 2;
   };
 }
 

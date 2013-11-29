@@ -4,24 +4,19 @@ app.factory('game', function () {
   return new TicTacToeGame();
 });
 
-app.factory('statistics', function () {
-  return {
-    score: [0, 0, 0] // Game score. 0 draws, 0:0 wins in the beginning
-  };
-});
-
-function Player(id, username) {
+function Player(id, defaultUsername) {
   this.id = id;
-  this.username = username || "";
+  this.username = "";
+  this.score = 0;
   this.getUsername = function () {
-    return this.username || "Player " + this.id;
+    return this.username || defaultUsername || "Player " + this.id;
   };
 }
 
 app.factory('players', function () {
   return [
-    new Player(1),
-    new Player(2)
+    new Player(1, "You"),
+    new Player(2, "EasyBot")
   ];
 });
 
@@ -29,9 +24,14 @@ app.factory('notifications', function () {
   return [];
 });
 
-app.service('settings', function () {
-  this.botEnabled = true;
-  this.botDelay = 500;
+app.factory('settings', function () {
+  return {
+    bot: {
+      enabled: true,
+        delay: 500,
+        level: 1
+    }
+  }
 });
 
 app.filter('reverse', function() {

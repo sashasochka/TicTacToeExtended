@@ -10,13 +10,33 @@ function Congratulations(text) {
   this.text = text;
 }
 
-function CellController($scope, $timeout, game, settings, players, notifications, statistics) {
+function CellController($scope, $timeout, game, settings, players, notifications) {
   $scope.coord = {
     x: $scope.innerCellIndex,
     y: $scope.outerCellIndex
   };
   $scope.ownerID = game.undefinedWinner;
   $scope.players = players;
+
+  var postMoveProcess = function () {
+    if (game.finished()) {
+      var winner = game.winner();
+      var msg;
+      if (winner === TicTacToeGame.draw) {
+        msg = 'Draw!'
+      } else {
+        msg = 'Player "' + players[winner - 1].getUsername() + '" has won!';
+        ++players[winner - 1].score;
+      }
+
+      notifications.push(new Congratulations(msg));
+      bootbox.confirm(msg + '<br>Play again?', function (result) {
+        if (result) {
+          $scope.$apply(game.reset());
+        }
+      });
+    }
+  };
 
   $scope.click = function () {
     if (!game.isAllowedMove($scope.coord)) {
@@ -25,21 +45,12 @@ function CellController($scope, $timeout, game, settings, players, notifications
       $scope.owner = players[game.currentPlayer - 1];
       $scope.ownerID = $scope.owner.id;
       game.makeTurn($scope.coord);
-      if (game.finished()) {
-        var winner = game.winner();
-        var msg = $scope.owner.getUsername() + ' has won!';
-        ++statistics.score[winner];
-
-        notifications.push(new Congratulations(msg));
-        bootbox.confirm('Congratulations! ' + msg + '<br>Play again?', function (result) {
-          if (result) {
-            $scope.$apply(game.reset());
-          }
-        });
-      } else if (settings.botEnabled) {
+      postMoveProcess();
+      if (settings.bot.enabled) {
         $timeout(function () {
-          game.makeTurn(new RandomBot().getMove(game));
-        }, settings.botDelay);
+          game.makeTurn(EasyBot.getMove(game, settings.bot.level));
+          postMoveProcess();
+        }, settings.bot.delay);
       }
     }
   };
@@ -72,11 +83,10 @@ function SquareController($scope, game) {
   };
 }
 
-function GameController($scope, game, settings, players, notifications, statistics) {
+function GameController($scope, game, settings, players, notifications) {
   $scope.notifications = notifications;
   $scope.gameSize = 3;
   $scope.indexesRange = _.range($scope.gameSize);
-  $scope.score = statistics.score;
   $scope.players = players;
   $scope.settings = settings;
   $scope.currentPlayer = function () {
@@ -87,5 +97,15 @@ function GameController($scope, game, settings, players, notifications, statisti
   };
   $scope.restartGame = function () {
     game.reset();
+  };
+  $scope.undoMove = function () {
+    game.undo();
+    if (settings.bot.enabled) {
+      game.undo();
+    }
+  };
+  $scope.resignAs = function (player) {
+    ++players[2 - player.id].score;
+    $scope.restartGame();
   };
 }

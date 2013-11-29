@@ -27,6 +27,7 @@ body {
 
 .highlight {
   border: 4px solid yellow;
+  transition: border 0.5s;
 }
 
 #main-table table {
@@ -67,7 +68,7 @@ body {
 #left-block {
   float: left;
   margin: 2%;
-  width: 18%;
+  width: 20%;
 }
 
 #cur-player-block {
@@ -109,9 +110,4 @@ body {
 .score-addon {
   font-weight: bold;
   font-size: 14px;
-}
-
-.bot-delay-input {
-  display: inline;
-  width: 40%;
 }

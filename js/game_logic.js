@@ -1,7 +1,7 @@
 "use strict";
 
 
-var TicTacToeGame = function () {
+var TicTacToeGame = function (movesHistory) {
   this.turn = 1;
   this.previousTurnCoord = {y: -1, x: -1};
   this.baseSize = 3;
@@ -20,6 +20,11 @@ var TicTacToeGame = function () {
     };
     return result;
   });
+  this.movesHistory = [];
+
+  if (movesHistory) {
+    _.each(movesHistory, this.makeTurn, this);
+  }
 };
 
 TicTacToeGame.draw = -1;
@@ -38,6 +43,19 @@ TicTacToeGame.Cell.prototype.empty = function () {
 };
 
 TicTacToeGame.prototype.reset = TicTacToeGame;
+
+TicTacToeGame.prototype.clone = function () {
+  return new TicTacToeGame(this.movesHistory);
+};
+
+TicTacToeGame.prototype.undo = function () {
+  if (this.isFirstMove()) {
+    return;
+  }
+  var movesHistory = this.movesHistory;
+  movesHistory.pop();
+  this.reset(movesHistory);
+};
 
 TicTacToeGame.prototype.getCell = function (arg1, arg2) {
   if (arguments.length === 1) {
@@ -65,7 +83,7 @@ TicTacToeGame.prototype.makeTurn = function (coord) {
   // makes a turn by the current user
   // returns false if a move is illegal
   if (!this.isAllowedMove(coord)) {
-    return false;
+    throw 'Illegal move!';
   }
 
   var squareCoord = this.squareCoordByCell(coord);
@@ -80,8 +98,9 @@ TicTacToeGame.prototype.makeTurn = function (coord) {
   // 2 becomes 1 and 1 becomes 2
   this.currentPlayer = this.opponentTo(this.currentPlayer);
   this.previousTurnCoord = _.clone(coord);
+  this.movesHistory.push(this.previousTurnCoord);
   this.turn++;
-  return true;
+  return this;
 };
 
 TicTacToeGame.prototype.isFirstMove = function () {

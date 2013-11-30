@@ -50,7 +50,8 @@
   <div id="main-block">
     <table id="main-table">
       <tr ng-repeat="square_row in indexesRange" ng-init="outerSquareIndex = square_row">
-        <td ng-repeat="square_col in indexesRange" ng-init="innerSquareIndex = square_col">
+        <td ng-repeat="square_col in indexesRange" ng-init="innerSquareIndex = square_col"
+            class="square-outer">
           <div ng-controller="SquareController" class="square"
                ng-class="{highlight: isNextSquare()}">
             <table>

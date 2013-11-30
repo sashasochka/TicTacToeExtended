@@ -41,15 +41,17 @@ app.filter('reverse', function() {
 });
 
 app.run(function ($rootScope, $window){
-  var table = angular.element("#main-table");
+  var table = angular.element('#main-table');
+  var squareOuter = angular.element('.square-outer');
+  var squares = angular.element('.square');
   var getSize = function () {
-    return Math.min($window.outerHeight * 0.88,
+    return Math.min($window.outerHeight * 0.85,
       $window.outerWidth * 0.5);
   };
-
   var updateSizes = function () {
     table.height(getSize());
     table.width(getSize());
+    squares.height(getSize() / 3 - 3);
   };
   updateSizes();
   angular.element($window).bind('resize', updateSizes);

@@ -71,6 +71,10 @@ body {
   width: 20%;
 }
 
+#left-block label {
+  display: block;
+}
+
 #cur-player-block {
   margin-bottom: 5%;
   padding: 4px;

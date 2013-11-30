@@ -23,13 +23,12 @@
     </div>
     <label class="control-label lead">Bot enabled
       <input type="checkbox" ng-model="settings.bot.enabled">
-    </label><br>
+    </label>
     <label class="control-label lead">Bot delay (ms)
       <input type="number" class="form-control inline-control"
              ng-model="settings.bot.delay"
              min="0" max="3000" step="100">
-
-    </label><br>
+    </label>
     <label class="control-label lead">Bot level
       <select class="form-control inline-control" ng-model="settings.bot.level">
         <option ng-repeat="level in [0,1,2]">{{ level }}</option>

@@ -74,7 +74,8 @@
   </div>
 
   <div id="notifications">
-    <div ng-repeat="notification in notifications | reverse" class="alert" ng-class="notification.class">
+    <div ng-repeat="notification in notifications | reverse | head:5"
+         class="alert notification" ng-class="notification.class">
       <strong>{{ notification.type}}! </strong> {{ notification.text }}
     </div>
   </div>

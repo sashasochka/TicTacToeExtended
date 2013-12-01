@@ -40,6 +40,10 @@ app.filter('reverse', function() {
   };
 });
 
+app.filter('head', function() {
+  return _.first;
+});
+
 app.run(function ($rootScope, $window){
   var table = angular.element('#main-table');
   var squareOuter = angular.element('.square-outer');

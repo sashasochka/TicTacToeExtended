@@ -95,6 +95,17 @@ body {
   height: 80%;
 }
 
+.notification {
+  opacity: 0;
+  transition: all 3s ease-in-out;
+  border: 0;
+}
+
+.notification:first-child {
+  opacity: 1;
+  border: 2px solid red;
+}
+
 #restart-btn {
   display: block;
   margin-bottom: 5%;

@@ -46,8 +46,8 @@ app.filter('head', function() {
 
 app.run(function ($rootScope, $window){
   var table = angular.element('#main-table');
-  var squareOuter = angular.element('.square-outer');
   var squares = angular.element('.square');
+  var cells = angular.element('.cell');
   var getSize = function () {
     return Math.min($window.outerHeight * 0.85,
       $window.outerWidth * 0.5);
@@ -55,7 +55,11 @@ app.run(function ($rootScope, $window){
   var updateSizes = function () {
     table.height(getSize());
     table.width(getSize());
-    squares.height(getSize() / 3 - 3);
+    var squareSize = getSize() / 3 - 3;
+    squares.height(squareSize);
+    squares.width(squareSize);
+    cells.height(squareSize / 3 - 15);
+    cells.width(squareSize / 3 - 15);
   };
   updateSizes();
   angular.element($window).bind('resize', updateSizes);

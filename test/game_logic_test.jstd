@@ -1,4 +1,5 @@
 load:
+  - ../js/vendor/lodash.min.js
   - ../js/plugins.js
   - ../js/game_logic.js
 test:

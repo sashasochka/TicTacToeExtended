@@ -21,7 +21,7 @@ var TicTacToeGame = function (movesHistory) {
     return result;
   });
   this.movesHistory = [];
-
+  this._winner = TicTacToeGame.undefinedWinner;
   if (movesHistory) {
     _.each(movesHistory, this.makeTurn, this);
   }
@@ -100,6 +100,7 @@ TicTacToeGame.prototype.makeTurn = function (coord) {
   this.previousTurnCoord = _.clone(coord);
   this.movesHistory.push(this.previousTurnCoord);
   this.turn++;
+  this._winner = this.findWinner();
   return this;
 };
 
@@ -128,7 +129,12 @@ TicTacToeGame.prototype.finished = function () {
   return this.winner() !== TicTacToeGame.undefinedWinner;
 };
 
+
 TicTacToeGame.prototype.winner = function () {
+  return this._winner;
+};
+
+TicTacToeGame.prototype.findWinner = function () {
   if (this._checkWinner(1)) {
     return 1;
   }
@@ -139,7 +145,6 @@ TicTacToeGame.prototype.winner = function () {
   // check draw
   // draw if impossible to win (trivial and non-100% check)
   return this.impossibleToWin() ? TicTacToeGame.draw : TicTacToeGame.undefinedWinner;
-
 };
 
 TicTacToeGame.prototype.impossibleToWin = function () {
@@ -285,12 +290,11 @@ TicTacToeGame.prototype._checkSquareFull = function (SquareCoord) {
   var sz = self.baseSize;
   var y = SquareCoord.y;
   var x = SquareCoord.x;
-  _.all(_.range(y * sz, (y + 1) * sz), function (row) {
+  return _.all(_.range(y * sz, (y + 1) * sz), function (row) {
     return _.all(_.range(x * sz, (x + 1) * sz), function (col) {
-      return self.getCell(col, row).empty();
+      return !self.getCell(col, row).empty();
     });
   });
-
 };
 
 TicTacToeGame.prototype._checkInnerRow = function (SquareCoord, innerRow, currentPlayer) {

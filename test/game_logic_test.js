@@ -27,25 +27,35 @@ gameLogicTest.prototype.testCell = function () {
 gameLogicTest.prototype.testDependencyOnPreviousMove = function () {
   var game = new TicTacToeGame();
 
-  assertTrue(game.makeTurn({x: 0, y: 5}));
+  game.makeTurn({x: 0, y: 5});
   assertFalse(game.isFirstMove());
   assertSame(game.previousTurnCoord.x , 0);
   assertSame(game.previousTurnCoord.y , 5);
 
-  assertFalse(game.makeTurn({x: 0, y: 3}));
-  assertFalse(game.makeTurn({x: 3, y: 8}));
-  assertFalse(game.makeTurn({x: 5, y: 8}));
+  assertException(function () {
+    game.makeTurn({x: 0, y: 2});
+  });
+  assertException(function () {
+    game.makeTurn({x: 3, y: 8});
+  });
+  assertException(function () {
+    game.makeTurn({x: 5, y: 8});
+  });
 
   assertSame(game.previousTurnCoord.x, 0);
   assertSame(game.previousTurnCoord.y, 5);
-  assertTrue(game.makeTurn({x: 2, y: 8}));
+  assertNoException(function () {
+    game.makeTurn({x: 2, y: 8});
+  });
 };
 
 gameLogicTest.prototype.testMoveSameCell = function () {
   var game = new TicTacToeGame();
-  assertTrue(game.makeTurn({x: 1, y: 0}));
-  assertTrue(game.makeTurn({x: 4, y: 0}));
-  assertFalse(game.makeTurn({x: 1, y: 0}));
+  game.makeTurn({x: 1, y: 0});
+  game.makeTurn({x: 4, y: 0});
+  assertException(function () {
+    game.makeTurn({x: 1, y: 0});
+  });
 };
 
 gameLogicTest.prototype.testSquareTopLeftCellCoord = function () {
@@ -68,7 +78,9 @@ gameLogicTest.prototype.testCurrentPlayer = function () {
   assertSame(game.currentPlayer, 1);
   game.makeTurn({x: 1, y: 0});
   assertSame(game.currentPlayer, 2);
-  assertFalse(game.makeTurn({x: 1, y: 0}));
+  assertException(function () {
+    game.makeTurn({x: 1, y: 0});
+  });
   assertSame(game.currentPlayer, 2);
 };
 
@@ -97,7 +109,8 @@ gameLogicTest.prototype.testGameFinishable = function () {
           x: _.random(game.size - 1),
           y: _.random(game.size - 1)
       };
-      if (game.makeTurn(tryCoord)) {
+      if (game.isAllowedMove(tryCoord)) {
+        game.makeTurn(tryCoord);
         ++moves;
         consequentFails = 0;
       } else {
@@ -115,7 +128,9 @@ gameLogicTest.prototype.testSquareIsFilled = function () {
   game.makeTurn({y: 0, x: 0});
   for (var y = 0; y < 3; ++y) {
     for (var x = 0; x < 3; ++x) {
-      if (y + x === 0) continue;
+      if (y + x === 0) {
+        continue;
+      }
       game.makeTurn({y: y, x: x});
       game.makeTurn({
         y: y * game.baseSize,
@@ -125,5 +140,5 @@ gameLogicTest.prototype.testSquareIsFilled = function () {
   }
   assertTrue(game._checkSquareFull({y: 0, x: 0}));
   assertFalse(game._checkSquareFull({y: 0, x: 1}));
-  assertTrue(game.makeTurn({y: 8, x: 8}));
+  game.makeTurn({y: 8, x: 8});
 };

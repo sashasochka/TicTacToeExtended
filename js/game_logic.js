@@ -1,7 +1,7 @@
 "use strict";
 
 
-var TicTacToeGame = function (movesHistory) {
+var TicTacToeGame = function (arg) {
   this.turn = 1;
   this.previousTurnCoord = {y: -1, x: -1};
   this.baseSize = 3;
@@ -22,7 +22,10 @@ var TicTacToeGame = function (movesHistory) {
   });
   this.movesHistory = [];
   this._winner = TicTacToeGame.undefinedWinner;
-  if (movesHistory) {
+
+
+  if (arg instanceof Array) {
+    var movesHistory = arg;
     _.each(movesHistory, this.makeTurn, this);
   }
 };
@@ -42,10 +45,17 @@ TicTacToeGame.Cell.prototype.empty = function () {
   return this.owner === 0;
 };
 
+TicTacToeGame.Cell.prototype.clone = function () {
+//  console.log('omg');
+  return new TicTacToeGame.Cell(this.coord, this.owner);
+};
+
 TicTacToeGame.prototype.reset = TicTacToeGame;
 
 TicTacToeGame.prototype.clone = function () {
-  return new TicTacToeGame(this.movesHistory);
+  return _.create(TicTacToeGame.prototype, _.cloneDeep(this, function (value) {
+      return (value instanceof TicTacToeGame.Cell) ? value.clone() : undefined;
+    }));
 };
 
 TicTacToeGame.prototype.undo = function () {

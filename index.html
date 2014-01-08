@@ -74,6 +74,7 @@
   </div>
 
   <div id="notifications">
+    {{ }} <!-- somehow fixes the bug on Android default browser and WebView -->
     <div ng-repeat="notification in notifications | reverse | head:5"
          class="alert notification" ng-class="notification.class">
       <strong>{{ notification.type}}! </strong> {{ notification.text }}
